@@ -4,6 +4,16 @@
 
 #include "fileutil.h"
 
+// based on research, the largest word in dictionary is 45, so lets use that as the capacity
+int wordLength = 45;
+// choosing the capacity size as 50
+int capacity = 1;
+
+// operational array
+char *optArray;
+int inputLen;
+int i = 0;
+
 // DIRECTIONS
 // Choose whether you are doing the 2D array or
 // the array of arrays.
@@ -28,16 +38,43 @@ char ** loadFileAA(char *filename, int *size)
 	
 	// TODO
 	// Allocate memory for an array of strings (arr).
-	// Read the file line by line.
-    //   Trim newline.
-	//   Expand array if necessary (realloc).
-	//   Allocate memory for the string (str).
-	//   Copy each line into the string (use strcpy).
+	char ** strArray = malloc(capacity * sizeof(char *));
+
+	while(!feof(in)){
+		
+		// Read the file line by line.
+		if(fgets(optArray, wordLength, in) != NULL){
+
+			//   Trim newline.
+			char *nl = strchr(optArray, '\n');
+
+			if (nl){
+
+				*nl = '\0';
+
+			}
+
+			inputLen = strlen(optArray);
+		
+			strArray[i] = malloc(inputLen);
+			strcpy(strArray[i], optArray);			
+
+		}
+
+		i++;
+		strArray = realloc(strArray ,((capacity++) * sizeof(char *)));
+
+	}
+
+
+	//   Expand array if necessary (realloc). DONE
+	//   Allocate memory for the string (str). DONE
+	//   Copy each line into the string (use strcpy). DONE 
 	//   Attach the string to the large array (assignment =).
     // Close the file.
 	
 	// The size should be the number of entries in the array.
-	*size = 0;
+	*size = capacity;
 	
 	// Return pointer to the array of strings.
 	return NULL;
