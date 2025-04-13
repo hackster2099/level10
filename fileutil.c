@@ -4,31 +4,18 @@
 
 #include "fileutil.h"
 
-// based on research, the largest word in dictionary is 45, so lets use that as the capacity
-int wordLength = 45;
-// choosing the capacity size as 50
-int capacity = 1;
-
-// operational array
-char *optArray;
-int inputLen;
-int i = 0;
-
-// DIRECTIONS
-// Choose whether you are doing the 2D array or
-// the array of arrays.
-// For the 2D array,
-//    implement loadFile2D, substringSearch2D, and free2D.
-// For the array of arrays, 
-//    implement loadFileAA, substringSearchAA, and freeAA.
-
+// chose array of array's
 
 // Load the text file from the given filename.
 // Return a pointer to the array of strings.
 // Sets the value of size to be the number of valid
 // entries in the array (not the total array length).
-char ** loadFileAA(char *filename, int *size)
-{
+char ** loadFileAA(char *filename, int *size) {
+
+    int n = 40;
+    char optArray[1000];
+    int strLen;
+
 	FILE *in = fopen(filename, "r");
 	if (!in)
 	{
@@ -38,46 +25,46 @@ char ** loadFileAA(char *filename, int *size)
 	
 	// TODO
 	// Allocate memory for an array of strings (arr).
-	char ** strArray = malloc(capacity * sizeof(char *));
+    char ** strArray = malloc(n * sizeof(char *));
+    int i = 1;
 
-	while(!feof(in)){
-		
-		// Read the file line by line.
-		if(fgets(optArray, wordLength, in) != NULL){
+	// Read the file line by line.
+    while(fgets(optArray, 1000, in)){
 
-			//   Trim newline.
-			char *nl = strchr(optArray, '\n');
+        //   Trim newline.
+        char *nl = strchr(optArray, '\n');
+        if(nl){
 
-			if (nl){
+            *nl = '\0';
 
-				*nl = '\0';
+        }
 
-			}
+        strLen = strlen(optArray);
+        //printf("\nsize: %d, string: %s", strLen, optArray);
 
-			inputLen = strlen(optArray);
-		
-			strArray[i] = malloc(inputLen);
-			strcpy(strArray[i], optArray);			
+        strArray[i] = malloc(strLen);
+        strcpy(strArray[i], optArray);
+        
+        //printf("\nstring: %s", strArray[i]);
 
-		}
-
-		i++;
-		strArray = realloc(strArray ,((capacity++) * sizeof(char *)));
-
-	}
-
-
-	//   Expand array if necessary (realloc). DONE
-	//   Allocate memory for the string (str). DONE
-	//   Copy each line into the string (use strcpy). DONE 
+        i++;
+        n++;
+        strArray = realloc(strArray, n *sizeof(char *));
+	
+    }
+        
+	//   Expand array if necessary (realloc).
+	//   Allocate memory for the string (str).
+	//   Copy each line into the string (use strcpy).
 	//   Attach the string to the large array (assignment =).
     // Close the file.
+	fclose(in);
 	
 	// The size should be the number of entries in the array.
-	*size = capacity;
-	
+	*size = (n - 40);
+
 	// Return pointer to the array of strings.
-	return NULL;
+	return strArray;
 }
 
 char (*loadFile2D(char *filename, int *size))[COLS]
@@ -106,10 +93,23 @@ char (*loadFile2D(char *filename, int *size))[COLS]
 
 // Search the array for the target string.
 // Return the found string or NULL if not found.
-char * substringSearchAA(char *target, char **lines, int size)
-{
+char * substringSearchAA(char *target, char **lines, int size) {
 
-	return NULL;
+	char *foundArr;
+
+	for(int i=1; i <= size; i++) {
+
+		foundArr = strstr(target, lines[i]);
+
+		if (foundArr != NULL) {
+			
+			break;
+
+		}
+		
+	}
+
+	return foundArr;
 }
 
 char * substringSearch2D(char *target, char (*lines)[COLS], int size)
