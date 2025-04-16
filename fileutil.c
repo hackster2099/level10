@@ -121,6 +121,7 @@ char * substringSearch2D(char *target, char (*lines)[COLS], int size)
 // Free the memory used by the array
 void freeAA(char ** arr, int size)
 {
+	free(arr);
 
 }
 
